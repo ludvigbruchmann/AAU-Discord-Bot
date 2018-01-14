@@ -16,7 +16,6 @@ serverInfo = ServerInfo()
 async def mailLoop():
     await client.wait_until_ready()
     while not client.is_closed:
-        print("tick")
         if len(database.db) > 0 and serverInfo.server != False and serverInfo.role != False:
             resultFromCheck = mail.check(database, client)
             if resultFromCheck != False:
