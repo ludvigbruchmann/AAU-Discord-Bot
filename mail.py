@@ -55,7 +55,7 @@ def check(database, discordClient, toCheck = 3):
 
                 username = database.getPassphrase(entry["passphrase"])["username"]
                 userId = database.getPassphrase(entry["passphrase"])["id"]
-                emailAddress = database.getPassphrase(entry["passphrase"])["email"]
+                emailAddress = entry["email"]
 
                 database.verify(userId, emailAddress)
 
