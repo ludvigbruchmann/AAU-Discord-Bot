@@ -12,6 +12,8 @@ passphraseWords = 4
 #discord
 token = '#'
 discordServer = '#'
+commandPrefix = "!"
+
 verified = 'Verified Student'
 verifyChannel = '#'
 
