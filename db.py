@@ -131,4 +131,9 @@ class Database:
                 return user
         return False
 
-test = Database()
+    def getUser(self, id):
+
+        try:
+            return self.db[id]
+        except KeyError as e:
+            return False
