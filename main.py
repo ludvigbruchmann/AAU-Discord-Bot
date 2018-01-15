@@ -52,18 +52,19 @@ async def on_message(message):
         while database.passphraseExists(keyword): #if passphrase is already used generate a new passphrase
             keyword = passphrase.generatePassphrase(config.passphraseWords)
 
-        database.addUser(message.author, message.author.id, keyword)
+        if database.getUser(message.author.id) == False:
+            database.addUser(message.author, message.author.id, keyword)
 
-        try: #try sending the passphrase to user in a dm
-            await client.send_message(
-                message.author,
-                "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
-            )
-        except discord.errors.Forbidden as e: #If user does not allow dm's from server members we will send the passphrase in the verify channel instead
-            await client.send_message(
-                serverInfo.server.get_channel(config.verifyChannel),
-                "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
-            )
+            try: #try sending the passphrase to user in a dm
+                await client.send_message(
+                    message.author,
+                    "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
+                )
+            except discord.errors.Forbidden as e: #If user does not allow dm's from server members we will send the passphrase in the verify channel instead
+                await client.send_message(
+                    serverInfo.server.get_channel(config.verifyChannel),
+                    "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
+                )
 
 client.loop.create_task(mailLoop())
 client.run(config.token)
