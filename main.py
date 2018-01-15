@@ -10,7 +10,7 @@ client = discord.Client()
 
 class ServerInfo: #weird object to circumvent discord.py's blocking run function
     server = False
-    role = False
+    verifiedRole = False
 serverInfo = ServerInfo()
 
 def cmd(command):
@@ -19,10 +19,10 @@ def cmd(command):
 async def mailLoop():
     await client.wait_until_ready()
     while not client.is_closed:
-        if len(database.db) > 0 and serverInfo.server != False and serverInfo.role != False:
+        if len(database.db) > 0 and serverInfo.server != False and serverInfo.verifiedRole != False:
             resultFromCheck = mail.check(database, client)
             if resultFromCheck != False:
-                await client.add_roles(resultFromCheck, serverInfo.role)
+                await client.add_roles(resultFromCheck, serverInfo.verifiedRole)
                 await client.send_message(serverInfo.server.get_channel(config.verifyChannel), "Verified user %s" % resultFromCheck.mention)
         await asyncio.sleep(config.wait)
 
@@ -32,7 +32,7 @@ async def on_ready():
     database.load()
     print('Database loaded')
     serverInfo.server = client.get_server(config.discordServer)
-    serverInfo.role = discord.utils.get(serverInfo.server.roles, name=config.verified)
+    serverInfo.verifiedRole = discord.utils.get(serverInfo.server.roles, name=config.verified)
 
 @client.event
 async def on_message(message):
@@ -42,6 +42,18 @@ async def on_message(message):
 
     if message.author == client.user:
         return
+
+    elif message.content.startswith(cmd('assign')):
+        if serverInfo.verifiedRole in message.author.roles:
+            if len(message.content.split()) > 1:
+                tempRole = message.content.split()[1]
+                if tempRole in config.studyProgrammes:
+                    await client.add_roles(message.author, discord.utils.get(serverInfo.server.roles, name=tempRole))
+                    await client.send_message(message.channel, "Added user %s to %s" % (message.author.mention, tempRole))
+                else:
+                    await client.send_message(message.channel, "Study programme %s does not exist" % tempRole)
+            else:
+                await client.send_message(message.channel, "Please specify a study programme")
 
     elif message.content.startswith(cmd('thonk')):
         await client.send_message(message.channel, content = "<a:thinkspin:394968623753723905>") #AAU CPH discord animated emoji

@@ -17,6 +17,11 @@ printChat = True
 
 verified = 'Verified Student'
 verifyChannel = '#'
+assignChannel = '#'
+
+studyProgrammes = [
+    'ITCOM'
+]
 
 #mail
 server = '#'
