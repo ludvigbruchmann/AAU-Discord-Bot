@@ -13,6 +13,7 @@ passphraseWords = 4
 token = '#'
 discordServer = '#'
 commandPrefix = "!"
+printChat = True
 
 verified = 'Verified Student'
 verifyChannel = '#'
