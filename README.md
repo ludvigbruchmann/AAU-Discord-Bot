@@ -12,4 +12,4 @@ In the `#verify-me` channel on discord you can write `!verify`. The bot will res
 
 #### Study programmes
 
-Once verified, a user can use the `#assign-me` channel to assign themselves to their study programme using the `!verify [study programme]` command.
+Once verified, a user can use the `#assign-me` channel to assign themselves to their study programme using the `!assign [study programme]` command.
