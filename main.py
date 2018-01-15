@@ -48,6 +48,10 @@ async def on_message(message):
             if len(message.content.split()) > 1:
                 tempRole = message.content.split()[1]
                 if tempRole in config.studyProgrammes:
+                    for role in config.studyProgrammes:
+                        tempRole2 = discord.utils.get(serverInfo.server.roles, name=role)
+                        if tempRole2 in message.author.roles:
+                            client.remove_roles(message.author, tempRole2)
                     await client.add_roles(message.author, discord.utils.get(serverInfo.server.roles, name=tempRole))
                     await client.send_message(message.channel, "Added user %s to %s" % (message.author.mention, tempRole))
                 else:
