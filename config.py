@@ -20,3 +20,5 @@ server = '#'
 username = '#'
 password = '#'
 wait = 10 #seconds to wait in between refreshing email
+universityDomain = "aau.dk"
+wait = 60 #seconds to wait in between refreshing email

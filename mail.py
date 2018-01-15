@@ -32,7 +32,7 @@ def get(toCheck = 3):
 
             msg = email.message_from_string(raw_email)
 
-            if "aau.dk" in msg['From']:
+            if config.universityDomain in msg['From']:
                 for part in msg.walk():
                     # each part is a either non-multipart, or another multipart message
                     # that contains further parts... Message is organized like a tree
