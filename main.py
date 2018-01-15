@@ -43,7 +43,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    elif message.content.startswith(cmd('assign')):
+    elif message.content.startswith(cmd('assign')) and message.channel.id == config.assignChannel:
         if serverInfo.verifiedRole in message.author.roles:
             if len(message.content.split()) > 1:
                 tempRole = message.content.split()[1]
@@ -51,7 +51,7 @@ async def on_message(message):
                     for role in config.studyProgrammes:
                         tempRole2 = discord.utils.get(serverInfo.server.roles, name=role)
                         if tempRole2 in message.author.roles:
-                            client.remove_roles(message.author, tempRole2)
+                            await client.remove_roles(message.author, tempRole2)
                     await client.add_roles(message.author, discord.utils.get(serverInfo.server.roles, name=tempRole))
                     await client.send_message(message.channel, "Added user %s to %s" % (message.author.mention, tempRole))
                 else:
@@ -62,7 +62,7 @@ async def on_message(message):
     elif message.content.startswith(cmd('thonk')):
         await client.send_message(message.channel, content = "<a:thinkspin:394968623753723905>") #AAU CPH discord animated emoji
 
-    elif message.content.startswith(cmd('verify')):
+    elif message.content.startswith(cmd('verify')) and message.channel.id == config.verifyChannel:
         keyword = passphrase.generatePassphrase(config.passphraseWords)
 
         while database.passphraseExists(keyword): #if passphrase is already used generate a new passphrase
@@ -78,7 +78,7 @@ async def on_message(message):
                 )
             except discord.errors.Forbidden as e: #If user does not allow dm's from server members we will send the passphrase in the verify channel instead
                 await client.send_message(
-                    serverInfo.server.get_channel(config.verifyChannel),
+                    message.channel,
                     "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
                 )
 
