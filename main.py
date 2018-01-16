@@ -19,9 +19,9 @@ def cmd(command):
 async def mailLoop():
     await client.wait_until_ready()
     while not client.is_closed:
-        if len(database.db) > 0 and serverInfo.server != False and serverInfo.verifiedRole != False:
+        if len(database.db) > 0 and serverInfo.server and serverInfo.verifiedRole:
             resultFromCheck = mail.check(database, client)
-            if resultFromCheck != False:
+            if resultFromCheck:
                 await client.add_roles(resultFromCheck, serverInfo.verifiedRole)
                 await client.send_message(serverInfo.server.get_channel(config.verifyChannel), "Verified user %s" % resultFromCheck.mention)
         await asyncio.sleep(config.wait)

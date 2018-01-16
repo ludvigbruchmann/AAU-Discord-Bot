@@ -62,7 +62,7 @@ class Database:
         Checks if a passphrase belongs to a user. Used when generating a new passphrase.
         """
 
-        if self.getPassphrase(passphrase) != False:
+        if self.getPassphrase(passphrase):
             return True
         else:
             return False
@@ -73,7 +73,7 @@ class Database:
         Checks if a passphrase belongs to a user. Used when generating a new passphrase.
         """
 
-        if self.getEmail(email) != False:
+        if self.getEmail(email):
             return True
         else:
             return False
