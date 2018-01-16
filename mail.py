@@ -2,6 +2,7 @@ import discord
 import imaplib
 import email
 import config
+import re
 
 mail = imaplib.IMAP4_SSL(config.server)
 mail.login(config.username, config.password)
@@ -51,10 +52,11 @@ def check(database, discordClient, toCheck = 3):
     data = get(toCheck)
     for entry in data:
         if not database.emailUsed(entry["email"]):
-            if database.passphraseExists(entry["passphrase"]):
+            pphrase = re.sub('[^0-9a-zA-Z]+', '', entry['passphrase'])
+            if database.passphraseExists(pphrase):
 
-                username = database.getPassphrase(entry["passphrase"])["username"]
-                userId = database.getPassphrase(entry["passphrase"])["id"]
+                username = database.getPassphrase(pphrase)["username"]
+                userId = database.getPassphrase(pphrase)["id"]
                 emailAddress = entry["email"]
 
                 database.verify(userId, emailAddress)
