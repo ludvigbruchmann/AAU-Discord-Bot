@@ -102,24 +102,30 @@ async def on_message(message):
     elif serverInfo.moderatorRole in message.author.roles:
 
         if message.content.startswith(cmd("add")) and len(message.content.split()) >= 3:
-            customCommands.addCommand(
+            if customCommands.addCommand(
                 message.content.split()[1],
                 message.content.split(" ", 2)[2]
-            )
-            await client.send_message(message.channel, "Added command `%s`" % message.content.split()[1])
+            ):
+                await client.send_message(message.channel, "Added command `%s`" % message.content.split()[1])
+            else:
+                await client.send_message(message.channel, "Command `%s` already exists" % message.content.split()[1])
 
         elif message.content.startswith(cmd("edit")) and len(message.content.split()) >= 3:
-            customCommands.editCommand(
+            if customCommands.editCommand(
                 message.content.split()[1],
                 message.content.split(" ", 2)[2]
-            )
-            await client.send_message(message.channel, "Edited command `%s`" % message.content.split()[1])
+            ):
+                await client.send_message(message.channel, "Edited command `%s`" % message.content.split()[1])
+            else:
+                await client.send_message(message.channel, "Command `%s` does not exist" % message.content.split()[1])
 
         elif message.content.startswith(cmd("remove")) and len(message.content.split()) >= 2:
-            customCommands.removeCommand(
+            if customCommands.removeCommand(
                 message.content.split()[1]
-            )
-            await client.send_message(message.channel, "Removed command `%s`" % message.content.split()[1])
+            ):
+                await client.send_message(message.channel, "Removed command `%s`" % message.content.split()[1])
+            else:
+                await client.send_message(message.channel, "Command `%s` does not exist" % message.content.split()[1])
 
 client.loop.create_task(mailLoop())
 client.run(config.token)
