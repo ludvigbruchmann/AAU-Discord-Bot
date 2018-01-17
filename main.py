@@ -3,17 +3,20 @@ import config
 import passphrase
 import db
 import mail
+import commands
 import asyncio
 
+customCommands = commands.CustomCommands()
 database = db.Database()
 client = discord.Client()
 
 class ServerInfo: #weird object to circumvent discord.py's blocking run function
     server = False
     verifiedRole = False
+    moderatorRole = False
 serverInfo = ServerInfo()
 
-def cmd(command):
+def cmd(command = ""):
     return config.commandPrefix + command
 
 async def mailLoop():
@@ -33,6 +36,7 @@ async def on_ready():
     print('Database loaded')
     serverInfo.server = client.get_server(config.discordServer)
     serverInfo.verifiedRole = discord.utils.get(serverInfo.server.roles, name=config.verified)
+    serverInfo.moderatorRole = discord.utils.get(serverInfo.server.roles, name=config.moderatorRole)
 
 @client.event
 async def on_message(message):
@@ -40,8 +44,24 @@ async def on_message(message):
     if config.printChat:
         print('[%s] %s: %s' % (message.channel, message.author, message.content))
 
+    temp_cmd = [message.content.split()[0][len(cmd()):], ""]
+
+    try:
+        temp_cmd[1] = message.content.split(" ", 1)[1]
+    except IndexError as e:
+        pass
+
     if message.author == client.user:
         return
+
+    elif customCommands.command(temp_cmd[0]) and message.content.startswith(cmd()):
+        await client.send_message(
+            message.channel,
+            customCommands.command(
+                temp_cmd[0],
+                temp_cmd[1]
+            )
+        )
 
     elif message.content.startswith(cmd('assign')) and message.channel.id == config.assignChannel:
         if serverInfo.verifiedRole in message.author.roles:
@@ -58,9 +78,6 @@ async def on_message(message):
                     await client.send_message(message.channel, "Study programme %s does not exist" % tempRole)
             else:
                 await client.send_message(message.channel, "Please specify a study programme")
-
-    elif message.content.startswith(cmd('thonk')):
-        await client.send_message(message.channel, content = "<a:thinkspin:394968623753723905>") #AAU CPH discord animated emoji
 
     elif message.content.startswith(cmd('verify')) and message.channel.id == config.verifyChannel:
         keyword = passphrase.generatePassphrase(config.passphraseWords)
@@ -81,6 +98,28 @@ async def on_message(message):
                     message.channel,
                     "%s this is your passphrase: `%s`\nPlease send an email to `%s` from your Aalborg University email adress with the passphrase as the content to get verified. This process can take a few minutes" % (message.author.mention, keyword, config.username)
                 )
+
+    elif serverInfo.moderatorRole in message.author.roles:
+
+        if message.content.startswith(cmd("add")) and len(message.content.split()) >= 3:
+            customCommands.addCommand(
+                message.content.split()[1],
+                message.content.split(" ", 2)[2]
+            )
+            await client.send_message(message.channel, "Added command `%s`" % message.content.split()[1])
+
+        elif message.content.startswith(cmd("edit")) and len(message.content.split()) >= 3:
+            customCommands.editCommand(
+                message.content.split()[1],
+                message.content.split(" ", 2)[2]
+            )
+            await client.send_message(message.channel, "Edited command `%s`" % message.content.split()[1])
+
+        elif message.content.startswith(cmd("remove")) and len(message.content.split()) >= 2:
+            customCommands.removeCommand(
+                message.content.split()[1]
+            )
+            await client.send_message(message.channel, "Removed command `%s`" % message.content.split()[1])
 
 client.loop.create_task(mailLoop())
 client.run(config.token)

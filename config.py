@@ -19,6 +19,8 @@ verified = 'Verified Student'
 verifyChannel = '#'
 assignChannel = '#'
 
+moderatorRole = 'Moderators'
+
 studyProgrammes = [
     'ITCOM'
 ]
