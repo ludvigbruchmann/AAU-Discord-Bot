@@ -33,14 +33,17 @@ def get(toCheck = 3):
 
             msg = email.message_from_string(raw_email)
 
-            if config.universityDomain in msg['From']:
+            regexphrase = "[A-Za-z0-9.-]*@[A-Za-z0-9.-]*." + config.universityDomain # I should maube add more than this, but I haven't seen any AAU emails with other characters than that \shrug
+            msgFromAdress = msg['From'].split()[-1][1:-1]
+
+            if re.match(regexphrase, msgFromAdress) is not None:
                 for part in msg.walk():
                     # each part is a either non-multipart, or another multipart message
                     # that contains further parts... Message is organized like a tree
                     if part.get_content_type() == 'text/plain':
                         output.append({
                             "passphrase": part.get_payload().split()[0],
-                            "email": msg['From'].split()[-1].replace("<","").replace(">","")
+                            "email": msgFromAdress
                         }) # prints the raw text
 
         except IndexError as e:
