@@ -16,11 +16,11 @@ class CustomCommands:
             try:
                 self.commands = json.loads(self.commands)
             except json.JSONDecodeError as e:
-                print("Commands file is corrupted, generating new database")
+                print("Commands file is corrupted, generating new commands file")
                 self.commands = {}
                 self.save(commandsFile)
         except FileNotFoundError as e:
-            print("No commands file found, generating new database")
+            print("No commands file found, generating new commands file")
             self.commands = {}
             self.save(commandsFile)
 
