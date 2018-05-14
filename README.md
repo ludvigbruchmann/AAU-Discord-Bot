@@ -8,7 +8,9 @@ This bot is made for the unofficial Aalborg University discord server.
 
 #### Verification
 
-In the `#verify-me` channel on discord you can write `!verify`. The bot will respond to that command with a randomly generated passphrase. In order to verify that you are a student at Aalborg University you need to send an email to aau@ludvig.xyz from your Aalborg University email, that email should _only_ contain the passphrase the bot gave you. After you have sent the email you should now be a verified user on the discord server.
+In the `#verify-me` channel on discord you can write `!verify`. The bot will respond to that command with a randomly generated passphrase and a sign on link. In order to verify that you are a student at Aalborg University you need to sign in with the same username and password you combination you would otherwise use at AAU.
+_#TODO: Implement the next part._
+After signing in you need to enter the passphrase in the text box and click verify.
 
 #### Study programmes
 
