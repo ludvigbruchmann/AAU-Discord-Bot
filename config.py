@@ -25,12 +25,7 @@ studyProgrammes = [
     'ITCOM'
 ]
 
-#mail
-server = '#'
-username = '#'
-password = '#'
-universityDomain = "aau.dk"
-wait = 60 #seconds to wait in between refreshing email
+#CAS
 casUrl = 'https://signon.aau.dk/cas/login'
 redirectUrl = 'http://localhost:5000/verify/'
 verifyUrl = 'https://signon.aau.dk/cas/serviceValidate'
