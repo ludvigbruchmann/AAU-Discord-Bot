@@ -1,3 +1,7 @@
+**THIS REPO IS NO LONGER MAINTAINED**
+
+If anyone from AAU wants to continue development, send me an email. For non-AAU development I would suggest creating a fork of this repository.
+
 # Aalborg University Discord Bot
 
 <a href="https://discord.gg/JfGRgpg"><img src="https://discordapp.com/api/guilds/394918256734896128/embed.png" alt="" /></a>
